@@ -3,21 +3,105 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>オフライン トランプゲーム集</title>
+  <title>大富豪テーブル</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app-shell">
-    <header class="site-header">
-      <button id="homeButton" class="ghost-button hidden" type="button">トップへ戻る</button>
-      <div>
-        <p class="eyebrow">Offline Card Table</p>
-        <h1 id="pageTitle">オフライン トランプゲーム集</h1>
-      </div>
-      <button id="restartButton" class="ghost-button hidden" type="button">もう一度遊ぶ</button>
-    </header>
+  <div id="app">
+    <section id="titleScreen" class="screen title-screen">
+      <div class="title-panel">
+        <p class="eyebrow">Offline 5 Players</p>
+        <h1>大富豪テーブル</h1>
+        <p class="lead">あなた + CPU4人で遊ぶ、GitHub Pages対応の大富豪専用ブラウザゲーム。</p>
 
-    <main id="app" aria-live="polite"></main>
+        <div class="title-grid">
+          <div class="rule-box">
+            <h2>簡易ルール</h2>
+            <p>1枚・ペア・3枚組・4枚組、パス、場流し、役職、カード交換に対応。革命や8切り、ジョーカーはありません。</p>
+          </div>
+
+          <div class="settings-box">
+            <h2>CPU速度</h2>
+            <div class="segmented" role="radiogroup" aria-label="CPU速度">
+              <label><input type="radio" name="speed" value="fast">はやい</label>
+              <label><input type="radio" name="speed" value="normal">ふつう</label>
+              <label><input type="radio" name="speed" value="slow">じっくり</label>
+            </div>
+          </div>
+
+          <div class="stats-box">
+            <h2>戦績</h2>
+            <dl id="statsList" class="stats-list"></dl>
+            <button id="resetStatsButton" class="ghost-button" type="button">戦績リセット</button>
+          </div>
+        </div>
+
+        <button id="startButton" class="primary-button" type="button">ゲーム開始</button>
+      </div>
+    </section>
+
+    <section id="gameScreen" class="screen game-screen is-hidden">
+      <header class="game-header">
+        <button id="backTitleButton" class="ghost-button small" type="button">タイトル</button>
+        <div>
+          <p class="eyebrow">Round <span id="roundNumber">1</span></p>
+          <h2 id="stateTitle">配布中</h2>
+        </div>
+        <button id="skipDealButton" class="ghost-button small" type="button">配布スキップ</button>
+      </header>
+
+      <main class="table-wrap">
+        <div id="playersArea" class="players-area"></div>
+
+        <section class="center-table" aria-label="場">
+          <div class="turn-banner" id="turnBanner">ゲーム開始</div>
+          <div class="field-meta">
+            <span id="fieldType">場: なし</span>
+            <span id="lastMove">直前: なし</span>
+          </div>
+          <div id="fieldCards" class="field-cards"></div>
+          <div id="dealAnimationLayer" class="deal-layer" aria-hidden="true"></div>
+        </section>
+
+        <aside class="log-panel">
+          <h3>ログ</h3>
+          <ol id="logList"></ol>
+        </aside>
+      </main>
+
+      <section id="exchangePanel" class="exchange-panel is-hidden">
+        <h3>カード交換</h3>
+        <p id="exchangeInfo"></p>
+        <div id="exchangeGiven" class="mini-cards"></div>
+        <button id="exchangeButton" class="primary-button" type="button">交換する</button>
+      </section>
+
+      <section class="hand-panel" id="handPanel">
+        <div class="hand-status">
+          <span id="selectionStatus">カードを選択してください</span>
+          <span id="illegalReason"></span>
+        </div>
+        <div id="playerHand" class="player-hand"></div>
+        <div class="action-bar">
+          <button id="playButton" class="primary-button" type="button" disabled>出す</button>
+          <button id="passButton" class="secondary-button" type="button" disabled>パス</button>
+          <button id="clearSelectionButton" class="ghost-button" type="button">選択解除</button>
+        </div>
+      </section>
+
+      <section id="resultPanel" class="result-panel is-hidden">
+        <div class="result-card">
+          <h2>ラウンド結果</h2>
+          <div id="resultList"></div>
+          <button id="nextRoundButton" class="primary-button" type="button">次のラウンドへ</button>
+        </div>
+      </section>
+
+      <details class="debug-panel">
+        <summary>Debug</summary>
+        <pre id="debugInfo"></pre>
+      </details>
+    </section>
   </div>
 
   <script src="script.js"></script>
